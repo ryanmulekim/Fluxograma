@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ciclo de Vida do Plano de Ação</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar tema">Tema: Sistema</button>
+
+  <div class="page">
+    <div class="prose">
+      <p class="eyebrow">SISAUD/SUS Monitor &middot; Monitoramento de Recomendações</p>
+      <h1>Ciclo de Vida do Plano de Ação</h1>
+      <p class="dek">
+        O caminho de um Plano de Ação desde o rascunho aberto pelo auditor até a
+        homologação pela Chefia — incluindo o passo de assinatura, já previsto
+        no fluxo, mas ainda não implementado no sistema.
+      </p>
+      <div class="meta-row">
+        <span>Escopo: <b>criação → aprovação → assinatura (planejada)</b></span>
+        <span>Fonte: <b>fmr-frontend, verificado por execução em 11/08/2026</b></span>
+      </div>
+      <nav class="toc" aria-label="Nesta página">
+        <span class="toc-label">Nesta página</span>
+        <a href="#diagrama">Diagrama</a>
+        <a href="#regras-de-negocio">Regras de Negócio</a>
+        <a href="#detalhes">Detalhes</a>
+        <a href="#sugestoes">Sugestões</a>
+      </nav>
+    </div>
+
+    <figure id="diagrama">
+      <div class="diagram-scroll">
+        <svg class="flow" viewBox="0 0 2780 320" role="img" aria-label="Fluxograma do ciclo de vida do Plano de Ação: o auditor cria o rascunho em quatro etapas do assistente, disponibiliza para a Chefia, que revisa e aprova (gerando os documentos .docx e .xlsx) ou devolve para ajustes, o que retorna o plano ao auditor até novo envio; após a aprovação, o plano é baixado e, por fim, seguirá para assinatura — etapa ainda não implementada.">
+          <defs>
+            <marker id="ah-neutral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="ah-neutral" d="M0,0 L10,5 L0,10 z" />
+            </marker>
+            <marker id="ah-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="ah-green" d="M0,0 L10,5 L0,10 z" />
+            </marker>
+            <marker id="ah-rust" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="ah-rust" d="M0,0 L10,5 L0,10 z" />
+            </marker>
+          </defs>
+
+          <!-- main lane connectors -->
+          <path class="flow-line" d="M260,82 L350,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M570,82 L660,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M880,82 L970,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M1190,82 L1280,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M1500,82 L1590,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M2120,82 L2210,82" marker-end="url(#ah-neutral)" />
+          <path class="flow-line" d="M2430,82 L2520,82" marker-end="url(#ah-neutral)" />
+
+          <!-- branch: Chefia decide -->
+          <path class="flow-line approve" d="M1810,82 L1900,82" marker-end="url(#ah-green)" />
+          <text class="edge-label approve" x="1855" y="72" text-anchor="middle">Aprovar</text>
+
+          <path class="flow-line return" d="M1700,124 L1700,194" marker-end="url(#ah-rust)" />
+          <text class="edge-label return" x="1716" y="163">Solicitar Ajustes</text>
+
+          <!-- loop-back: devolvido retorna para a Etapa 3 -->
+          <path class="flow-line return" d="M1590,236 L770,236 L770,124" marker-end="url(#ah-rust)" />
+          <text class="edge-label return" x="1180" y="228" text-anchor="middle">Auditor corrige e reenvia</text>
+
+          <!-- N1 -->
+          <g class="actor-elaborador">
+            <rect class="node-box" x="40" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="43" y="43" width="4" height="78" />
+            <text class="node-title" x="56" y="64">Inicia o Plano de Ação</text>
+            <text class="node-sub" x="56" y="82">Etapa 1 · cria o rascunho</text>
+            <rect class="chip-bg" x="56" y="90" width="70" height="16" rx="8" />
+            <text class="chip-text" x="91" y="101" text-anchor="middle">EM_EDICAO</text>
+          </g>
+
+          <!-- N2 -->
+          <g class="actor-elaborador">
+            <rect class="node-box" x="350" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="353" y="43" width="4" height="78" />
+            <text class="node-title" x="366" y="64">Define a Equipe</text>
+            <text class="node-sub" x="366" y="82">Etapa 2 · quem monitora</text>
+          </g>
+
+          <!-- N3 -->
+          <g class="actor-elaborador">
+            <rect class="node-box" x="660" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="663" y="43" width="4" height="78" />
+            <text class="node-title" x="676" y="64">Define as Recomendações</text>
+            <text class="node-sub" x="676" y="82">Etapa 3 · categoria e prazo</text>
+          </g>
+
+          <!-- N4 -->
+          <g class="actor-elaborador">
+            <rect class="node-box" x="970" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="973" y="43" width="4" height="78" />
+            <text class="node-title" x="986" y="64">Revisa e Valida</text>
+            <text class="node-sub" x="986" y="82">Etapa 4 · confirmação final</text>
+          </g>
+
+          <!-- N5 -->
+          <g class="actor-sistema">
+            <rect class="node-box" x="1280" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="1283" y="43" width="4" height="78" />
+            <text class="node-title" x="1296" y="64">Disponibiliza p/ Chefia</text>
+            <text class="node-sub" x="1296" y="82">Abre a fila de aprovação</text>
+            <rect class="chip-bg" x="1296" y="90" width="146" height="16" rx="8" />
+            <text class="chip-text" x="1369" y="101" text-anchor="middle">&#8594; AGUARDANDO_APROVACAO</text>
+          </g>
+
+          <!-- N6 -->
+          <g class="actor-chefia">
+            <rect class="node-box" x="1590" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="1593" y="43" width="4" height="78" />
+            <text class="node-title" x="1606" y="64">Chefia Revisa o Plano</text>
+            <text class="node-sub" x="1606" y="82">Fila ou detalhe</text>
+          </g>
+
+          <!-- B1: devolvido -->
+          <g class="actor-chefia">
+            <rect class="node-box" x="1590" y="194" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="1593" y="197" width="4" height="78" />
+            <text class="node-title" x="1606" y="218">Devolve para Ajustes</text>
+            <text class="node-sub" x="1606" y="236">Pendências por recomendação</text>
+            <rect class="chip-bg" x="1606" y="244" width="80" height="16" rx="8" />
+            <text class="chip-text" x="1646" y="255" text-anchor="middle">&#8594; EM_EDICAO</text>
+          </g>
+
+          <!-- N7 -->
+          <g class="actor-sistema">
+            <rect class="node-box" x="1900" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="1903" y="43" width="4" height="78" />
+            <text class="node-title" x="1916" y="64">Gera os Documentos</text>
+            <text class="node-sub" x="1916" y="82">.docx + .xlsx na aprovação</text>
+            <rect class="chip-bg" x="1916" y="90" width="76" height="16" rx="8" />
+            <text class="chip-text" x="1954" y="101" text-anchor="middle">&#8594; APROVADO</text>
+          </g>
+
+          <!-- N8 -->
+          <g class="actor-shared">
+            <rect class="node-box" x="2210" y="40" width="220" height="84" rx="8" />
+            <rect class="node-bar" x="2213" y="43" width="4" height="78" />
+            <text class="node-title" x="2226" y="64">Baixa os Documentos</text>
+            <text class="node-sub" x="2226" y="82">Um clique por arquivo</text>
+          </g>
+
+          <!-- N9 planned -->
+          <g class="planned">
+            <rect class="node-box" x="2520" y="40" width="220" height="84" rx="8" />
+            <text class="node-title" x="2536" y="64">Assinatura do Plano</text>
+            <text class="node-sub" x="2536" y="82">&#128260; Não implementada</text>
+          </g>
+        </svg>
+      </div>
+
+      <figcaption>
+        O fluxo principal (azul) é conduzido pelo auditor pelas quatro etapas do
+        assistente; o sistema (roxo) faz as duas transições automáticas —
+        disponibilizar e gerar os documentos. A Chefia (âmbar) decide entre
+        <b>aprovar</b>, que dispara a geração do <code>.docx</code> e do
+        <code>.xlsx</code> antes de homologar, ou <b>devolver</b>, que volta o
+        plano ao auditor com pendências por recomendação até o reenvio.
+      </figcaption>
+
+      <div class="legend">
+        <div class="legend-item"><span class="swatch blue"></span>Auditor / Elaborador</div>
+        <div class="legend-item"><span class="swatch amber"></span>Chefia</div>
+        <div class="legend-item"><span class="swatch violet"></span>Sistema (automático)</div>
+        <div class="legend-item"><span class="swatch dashed"></span>Planejado, não implementado</div>
+      </div>
+    </figure>
+
+    <section class="rules" id="regras-de-negocio">
+      <h2>Regras de Negócio</h2>
+      <p class="section-intro">
+        O que governa cada transição do fluxo acima — os critérios que o
+        sistema aplica em cada etapa, não apenas a sequência de telas.
+      </p>
+      <div class="rules-scroll">
+        <div class="rules-flow">
+          <div class="rule-card">
+            <span class="rule-number">1</span>
+            <b>Pré-requisito: atividade de auditoria com constatações e recomendações.</b>
+            <p>
+              Um Plano de Ação só pode ser gerado a partir de uma atividade
+              de auditoria que já possua constatações e recomendações
+              registradas. Sem esses dois elementos não há o que monitorar,
+              e o assistente (Etapa 1) não é iniciado.
+            </p>
+          </div>
+
+          <div class="rule-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h14M13 6l7 6-7 6" />
+            </svg>
+          </div>
+
+          <div class="rule-card">
+            <span class="rule-number">2</span>
+            <b>Equipe de monitoramento e recomendações são de preenchimento obrigatório do auditor.</b>
+            <p>
+              Nas Etapas 2 e 3, o auditor preenche ou complementa,
+              respectivamente, os dados da equipe responsável pelo
+              monitoramento e os dados de cada recomendação da atividade.
+              Essas duas seções concentram a maior parte da informação que o
+              plano carrega adiante.
+            </p>
+          </div>
+
+          <div class="rule-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h14M13 6l7 6-7 6" />
+            </svg>
+          </div>
+
+          <div class="rule-card">
+            <span class="rule-number">3</span>
+            <b>Edição de recomendações: individual ou em massa.</b>
+            <p>
+              Na Etapa 3, o auditor edita as recomendações uma a uma ou em
+              lote, selecionando várias de uma vez (modo de múltipla
+              seleção). Em ambos os casos, o único dado exigido nesse ponto é
+              a categoria da recomendação — é ela que determina
+              automaticamente se aquela recomendação é ou não passível de
+              monitoramento.
+            </p>
+          </div>
+
+          <div class="rule-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h14M13 6l7 6-7 6" />
+            </svg>
+          </div>
+
+          <div class="rule-card">
+            <span class="rule-number">4</span>
+            <b>Validação da Etapa 4 antes de disponibilizar para a Chefia.</b>
+            <p>
+              Na Etapa 4 (Confirmação), o auditor revisa o que preencheu e
+              aciona "Validar". O sistema confere se os dados obrigatórios
+              das Etapas 2 e 3 estão completos e corretos: havendo pendência,
+              exibe um alerta apontando os dados faltantes e o plano
+              permanece em edição; estando tudo certo, libera ao auditor a
+              escolha entre permanecer em edição (<code>EM_EDICAO</code>) ou
+              disponibilizar o plano para a Chefia
+              (<code>→ AGUARDANDO_APROVACAO</code>).
+            </p>
+          </div>
+
+          <div class="rule-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h14M13 6l7 6-7 6" />
+            </svg>
+          </div>
+
+          <div class="rule-card">
+            <span class="rule-number">5</span>
+            <b>Revisão e decisão da Chefia.</b>
+            <p>
+              Depois de disponibilizado, o plano entra na fila da Chefia, que
+              revisa os dados preenchidos pelo auditor. Havendo
+              inconsistência, a Chefia solicita ajustes e devolve o plano ao
+              auditor (<code>→ EM_EDICAO</code>); estando tudo em
+              conformidade, a Chefia aprova o plano
+              (<code>→ APROVADO</code>), o que dispara a geração dos
+              documentos e dá início à etapa de assinaturas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="prose">
+      <div class="notes" id="detalhes">
+        <h2 class="notes-label">Detalhes que o diagrama simplifica</h2>
+        <ul>
+          <li>
+            <span>
+              <b>Reenviar resolve os ajustes da rodada anterior.</b> Ao disponibilizar
+              de novo após uma devolução, o backend promove os ajustes
+              <code>SOLICITADO</code> da recomendação automaticamente — não há um
+              passo separado de "concluir ajuste".
+            </span>
+          </li>
+          <li>
+            <span>
+              <b>A aprovação só se completa se os dois documentos forem gerados.</b>
+              Se a geração falhar, o plano permanece <code>AGUARDANDO_APROVACAO</code>
+              e nada é homologado — evita um plano "aprovado" sem documento para
+              baixar.
+            </span>
+          </li>
+          <li>
+            <span>
+              <b>Os downloads exigem clique individual em cada arquivo.</b> Dois
+              downloads disparados automaticamente em sequência são bloqueados pelo
+              Chrome a partir do segundo — por isso o modal de sucesso tem dois
+              botões, não um download automático.
+            </span>
+          </li>
+          <li>
+            <span>
+              <b>A etapa de assinatura ainda é apenas um botão sem função.</b> A
+              tela "Meus Planos de Ação" já reserva a ação <code>Assinar</code> para
+              planos aprovados; falta o fluxo de assinatura em si.
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="suggestions" id="sugestoes">
+      <h2>Sugestões</h2>
+      <p class="section-intro">
+        Espaço para reunir sugestões de ajuste neste fluxo, para avaliação da
+        supervisão. Cada item vira um cartão abaixo, com um status para
+        acompanhar a decisão.
+      </p>
+
+      <!--
+        Modelo para um cartão real (repita este bloco e remova o placeholder
+        abaixo quando as sugestões chegarem):
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Contexto</span>
+          </div>
+          <h3>Título curto da sugestão</h3>
+          <p>Descrição objetiva: o que muda e por quê.</p>
+        </div>
+
+        Status disponíveis: "status open" (âmbar), "status accepted" (verde),
+        "status rejected" (terracota).
+
+        Tag é livre — nomeia a parte do fluxo a que a sugestão se refere
+        (ex.: "Assinaturas", "Wizard", "Aprovação"). Repita a mesma tag em
+        todo cartão que fale do mesmo contexto, para permitir agrupar
+        visualmente no futuro.
+      -->
+      <div class="suggestions-filter" id="suggestions-filter" role="group" aria-label="Filtrar sugestões por contexto"></div>
+
+      <div class="suggestions-grid">
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Assinaturas</span>
+            <span class="variant-tag">1A</span>
+          </div>
+          <h3>Tela de Acompanhamento de Assinaturas</h3>
+          <p>
+            Tela dedicada para consultar o andamento das assinaturas de um
+            Plano de Ação: quem já assinou, quem está pendente e a data/hora
+            de cada assinatura, com opção de notificar quem falta. Segue a
+            ordem fixa Auditor → Auditado → Equipe → Chefia, com barra de
+            progresso (ex.: "3 de 4 assinaturas concluídas"). Serve como base
+            para a etapa de Assinatura (N9), hoje apenas planejada no fluxo.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-assinaturas-mockup.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-assinaturas-mockup.png"
+              alt="Mockup da tela Acompanhamento de Assinaturas: cartões por assinante (Auditor, Auditado, Equipe, Chefia) com status e barra de progresso"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Assinaturas</span>
+            <span class="variant-tag">1B</span>
+          </div>
+          <h3>Tela de Acompanhamento de Assinaturas</h3>
+          <p>
+            Tela dedicada para consultar o andamento das assinaturas de um
+            Plano de Ação: quem já assinou, quem está pendente e a data/hora
+            de cada assinatura, com opção de notificar quem falta. Segue a
+            ordem fixa Auditor → Auditado → Equipe → Chefia, com barra de
+            progresso (ex.: "3 de 4 assinaturas concluídas"). Serve como base
+            para a etapa de Assinatura (N9), hoje apenas planejada no fluxo.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-assinaturas-mockup-cards.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-assinaturas-mockup-cards.png"
+              alt="Mockup da tela Acompanhamento de Assinaturas: cabeçalho com indicadores (progresso, pendentes, maior espera, prazo, situação) e cartões por assinante (Auditor, Auditado, Equipe, Chefia) com status e botão de ação"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Assinaturas</span>
+            <span class="variant-tag">1C</span>
+          </div>
+          <h3>Tela de Acompanhamento de Assinaturas</h3>
+          <p>
+            Tela dedicada para consultar o andamento das assinaturas de um
+            Plano de Ação: quem já assinou, quem está pendente e a data/hora
+            de cada assinatura, com opção de notificar quem falta. Segue a
+            ordem fixa Auditor → Auditado → Equipe → Chefia, com barra de
+            progresso (ex.: "3 de 4 assinaturas concluídas"). Serve como base
+            para a etapa de Assinatura (N9), hoje apenas planejada no fluxo.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-assinaturas-mockup-timeline.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-assinaturas-mockup-timeline.png"
+              alt="Mockup da tela Acompanhamento de Assinaturas: linha do tempo vertical com uma etapa por assinante, painel de tempo de pendência por parte e histórico de eventos ao lado"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Assinaturas</span>
+            <span class="variant-tag">1D</span>
+          </div>
+          <h3>Tela de Acompanhamento de Assinaturas</h3>
+          <p>
+            Tela dedicada para consultar o andamento das assinaturas de um
+            Plano de Ação: quem já assinou, quem está pendente e a data/hora
+            de cada assinatura, com opção de notificar quem falta. Segue a
+            ordem fixa Auditor → Auditado → Equipe → Chefia, com barra de
+            progresso (ex.: "3 de 4 assinaturas concluídas"). Serve como base
+            para a etapa de Assinatura (N9), hoje apenas planejada no fluxo.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-assinaturas-mockup-tabela.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-assinaturas-mockup-tabela.png"
+              alt="Mockup da tela Acompanhamento de Assinaturas: partes signatárias em formato de tabela, com ordem do fluxo, responsável, status, data/pendência, prazo e ações por linha"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Assinaturas</span>
+          </div>
+          <h3>Assinaturas como bloco separado, fora das 4 etapas</h3>
+          <p>
+            As assinaturas só ficam visíveis para planos já aprovados pela
+            Chefia, e diferente das etapas 1 a 4 não são algo que o usuário
+            preenche — é só acompanhamento. Por isso a ideia é exibi-las num
+            bloco próprio ("Acompanhamento"), separado da barra de progresso
+            do assistente, com seu próprio indicador ("2 de 4 assinaturas")
+            e botão "Ver assinaturas" para abrir a tela de detalhe.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-assinaturas-fora-do-wizard.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-assinaturas-fora-do-wizard.png"
+              alt="Mockup da etapa de Confirmação do wizard com um bloco 'Acompanhamento' separado, mostrando o progresso das assinaturas e o botão Ver assinaturas"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Aprovação</span>
+          </div>
+          <h3>Modal de confirmação com download em 2 botões</h3>
+          <p>
+            Quando a Chefia valida e aprova o Plano de Ação, exibir um
+            pop-up informando que o plano foi aprovado, com dois botões
+            separados — "Baixar Planilha" (.xlsx) e "Baixar Plano de Ação"
+            (.docx) — em vez de um único botão. Alguns navegadores bloqueiam
+            o segundo download quando dois são disparados automaticamente
+            em sequência, por isso a separação em cliques individuais.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-aprovacao-modal-downloads.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-aprovacao-modal-downloads.png"
+              alt="Mockup do modal 'Plano de Ação aprovado' com os botões Baixar Planilha e Baixar Plano de Ação"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="card-badges">
+            <span class="status open">Em aberto</span>
+            <span class="tag">Aprovação</span>
+          </div>
+          <h3>Baixar documentos de novo em "Meus Planos de Ação"</h3>
+          <p>
+            Na tabela "Meus Planos de Ação", quando um plano estiver com
+            status Aprovado, exibir um botão "Baixar" na coluna Ações que
+            abre o mesmo modal de dois botões (Baixar Planilha / Baixar
+            Plano de Ação) usado na aprovação inicial — permitindo baixar os
+            documentos de novo depois, sem precisar reabrir o fluxo de
+            aprovação.
+          </p>
+          <a
+            class="suggestion-mockup"
+            href="sugestao-aprovacao-baixar-meus-planos.png"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="sugestao-aprovacao-baixar-meus-planos.png"
+              alt="Mockup da tabela Lista de Planos de Ação com o modal 'Documentos do Plano de Ação' aberto a partir do botão Baixar de um plano aprovado"
+              loading="lazy"
+            />
+            <span>Ver mockup em tamanho real</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="prose">
+      <footer class="foot">
+        Diagrama de referência interna — reflete o fluxo implementado no
+        fmr-frontend em 11/08/2026. Não substitui o CLAUDE.md do projeto como
+        fonte de verdade.
+      </footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,708 @@
+:root {
+  --bg: #eef2f8;
+  --surface: #ffffff;
+  --surface-2: #f3f6fb;
+  --ink: #16233d;
+  --ink-muted: #4c5c78;
+  --ink-faint: #7c8aa5;
+  --border: #d3dcea;
+  --border-strong: #b7c4da;
+
+  --accent-blue: #1b4b91;
+  --accent-blue-soft: #e6edf9;
+  --accent-amber: #a5710f;
+  --accent-amber-soft: #f7ecd8;
+  --accent-violet: #5a4a8a;
+  --accent-violet-soft: #ebe7f6;
+  --accent-green: #2b7a56;
+  --accent-green-soft: #e2f1e9;
+  --accent-rust: #a14a3d;
+  --accent-rust-soft: #f7e8e5;
+  --planned: #7c7896;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1524;
+    --surface: #161f33;
+    --surface-2: #1c2740;
+    --ink: #e7ecf6;
+    --ink-muted: #a9b6cc;
+    --ink-faint: #7686a3;
+    --border: #2c3a54;
+    --border-strong: #3a4b6a;
+
+    --accent-blue: #7ea1e0;
+    --accent-blue-soft: #1d2c4a;
+    --accent-amber: #e0ac54;
+    --accent-amber-soft: #3a2f1c;
+    --accent-violet: #b3a3ea;
+    --accent-violet-soft: #2a2444;
+    --accent-green: #67cc9e;
+    --accent-green-soft: #17332a;
+    --accent-rust: #e2917f;
+    --accent-rust-soft: #3a2620;
+    --planned: #9490b3;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e1524;
+  --surface: #161f33;
+  --surface-2: #1c2740;
+  --ink: #e7ecf6;
+  --ink-muted: #a9b6cc;
+  --ink-faint: #7686a3;
+  --border: #2c3a54;
+  --border-strong: #3a4b6a;
+
+  --accent-blue: #7ea1e0;
+  --accent-blue-soft: #1d2c4a;
+  --accent-amber: #e0ac54;
+  --accent-amber-soft: #3a2f1c;
+  --accent-violet: #b3a3ea;
+  --accent-violet-soft: #2a2444;
+  --accent-green: #67cc9e;
+  --accent-green-soft: #17332a;
+  --accent-rust: #e2917f;
+  --accent-rust-soft: #3a2620;
+  --planned: #9490b3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#diagrama,
+#regras-de-negocio,
+#detalhes,
+#sugestoes {
+  scroll-margin-top: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  margin: 0;
+  padding: 48px clamp(16px, 4vw, 56px) 72px;
+  line-height: 1.5;
+}
+
+/* Full-width page: the diagram and the suggestions grid want the room;
+   running text stays narrow via .prose so it doesn't stretch edge to edge. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.prose {
+  max-width: 760px;
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin: 0 0 10px;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(28px, 4vw, 36px);
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.dek {
+  font-size: 16px;
+  color: var(--ink-muted);
+  max-width: 62ch;
+  margin: 0 0 8px;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.meta-row span b {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+/* --- table of contents: the page grew to 4 sections, a quick jump-nav
+   helps whoever is presenting or re-reading skip straight to a part --- */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.toc-label {
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+.toc a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 3px 0;
+  border-bottom: 1px solid transparent;
+}
+
+.toc a:hover,
+.toc a:focus-visible {
+  border-bottom-color: currentColor;
+}
+
+figure {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 20px 20px;
+}
+
+.diagram-scroll {
+  overflow-x: auto;
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: -4px -4px;
+  border-radius: 8px;
+}
+
+/* Fixed natural size, not scaled-to-fit: at this many nodes in a row,
+   shrinking to the viewport would make the labels unreadable. Narrower
+   screens scroll .diagram-scroll horizontally instead. */
+svg.flow {
+  display: block;
+  width: 2780px;
+  height: 320px;
+}
+
+/* --- node styling, driven by CSS so both themes stay in sync --- */
+.node-box {
+  fill: var(--surface);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.node-title {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.node-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-muted);
+}
+.node-bar {
+  rx: 2;
+}
+
+.actor-elaborador .node-bar {
+  fill: var(--accent-blue);
+}
+.actor-chefia .node-bar {
+  fill: var(--accent-amber);
+}
+.actor-sistema .node-bar {
+  fill: var(--accent-violet);
+}
+.actor-shared .node-bar {
+  fill: var(--ink-faint);
+}
+
+.chip-bg {
+  fill: var(--surface-2);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.chip-text {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.01em;
+  fill: var(--ink-muted);
+}
+
+.planned .node-box {
+  fill: var(--surface-2);
+  stroke: var(--planned);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 4;
+}
+.planned .node-title {
+  fill: var(--planned);
+}
+.planned .node-sub {
+  fill: var(--planned);
+}
+
+.flow-line {
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 1.6;
+}
+.flow-line.approve {
+  stroke: var(--accent-green);
+}
+.flow-line.return {
+  stroke: var(--accent-rust);
+}
+
+.edge-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--ink-muted);
+}
+.edge-label.approve {
+  fill: var(--accent-green);
+}
+.edge-label.return {
+  fill: var(--accent-rust);
+}
+
+.ah-neutral {
+  fill: var(--ink-faint);
+}
+.ah-green {
+  fill: var(--accent-green);
+}
+.ah-rust {
+  fill: var(--accent-rust);
+}
+
+figcaption {
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  line-height: 1.6;
+  max-width: 90ch;
+}
+
+figcaption b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.swatch {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  flex: none;
+}
+.swatch.blue {
+  background: var(--accent-blue);
+}
+.swatch.amber {
+  background: var(--accent-amber);
+}
+.swatch.violet {
+  background: var(--accent-violet);
+}
+.swatch.dashed {
+  background: transparent;
+  border: 1.4px dashed var(--planned);
+}
+
+.notes-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 12px;
+}
+
+.section-intro {
+  font-size: 15px;
+  color: var(--ink-muted);
+  max-width: 68ch;
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+/* Regras de Negócio: same horizontal-flow idea as the SVG diagram above —
+   fixed-width cards in a row, connected by arrows, scrolling instead of
+   shrinking on narrow screens. Kept as plain HTML/CSS (not SVG) because
+   the rule text is prose-length and needs to wrap, not fit a fixed box. */
+.rules-scroll {
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.rules-flow {
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+}
+
+.rule-card {
+  width: 252px;
+  flex: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rule-number {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-blue-soft);
+  color: var(--accent-blue);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule-card b {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+
+.rule-card p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.rule-arrow {
+  flex: none;
+  width: 40px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-faint);
+}
+
+.notes ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notes li {
+  display: flex;
+  gap: 12px;
+  font-size: 14.5px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.notes li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  flex: none;
+  margin-top: 8px;
+}
+
+.notes li b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.notes code,
+.rule-card code {
+  font-family: var(--mono);
+  font-size: 0.92em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.05em 0.4em;
+  color: var(--ink);
+}
+
+/* --- Sugestões / Regras de Negócio: full-width like the diagram, so the
+   card grid / card flow has room to breathe instead of a cramped strip --- */
+.suggestions h2,
+.rules h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.005em;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.suggestions-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.filter-chip {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.filter-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.filter-chip.is-active {
+  background: var(--accent-blue-soft);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.suggestion-card[hidden] {
+  display: none;
+}
+
+.suggestion-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestion-card h3 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.suggestion-card p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.card-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.suggestion-card .status,
+.suggestion-card .tag {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.status.open {
+  background: var(--accent-amber-soft);
+  color: var(--accent-amber);
+}
+.status.accepted {
+  background: var(--accent-green-soft);
+  color: var(--accent-green);
+}
+.status.rejected {
+  background: var(--accent-rust-soft);
+  color: var(--accent-rust);
+}
+
+.suggestion-card .tag {
+  background: var(--surface-2);
+  color: var(--ink-muted);
+  border: 1px solid var(--border);
+}
+
+/* Identifica variações de layout para a mesma proposta (1A, 1B...) —
+   deliberadamente discreto e monoespaçado, pra não competir visualmente
+   com a tag de contexto nem parecer mais um status. */
+.variant-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--ink-faint);
+  border: 1px dashed var(--border-strong);
+}
+
+.suggestion-mockup {
+  display: block;
+  margin-top: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.suggestion-mockup img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.suggestion-mockup span {
+  display: block;
+  padding: 6px 10px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+}
+
+.suggestion-mockup:hover span {
+  color: var(--ink);
+}
+
+.suggestion-card.placeholder {
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  text-align: center;
+  border-style: dashed;
+  border-color: var(--planned);
+}
+.suggestion-card.placeholder p {
+  color: var(--planned);
+  font-size: 13.5px;
+}
+
+footer.foot {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+}
+
+/* --- theme toggle: standalone-project affordance, the artifact viewer
+   handled this for you before, a plain browser tab needs its own control --- */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    position: static;
+    margin: 0 auto 24px;
+    display: flex;
+    width: fit-content;
+  }
+}
