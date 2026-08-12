@@ -98,3 +98,28 @@
     });
   });
 })();
+
+/**
+ * Expande/recolhe cada grupo de Regras de Negócio. Recolhido é o estado
+ * inicial (resumo de uma linha); clicar no cabeçalho troca o resumo pela
+ * lista completa de regras daquele grupo. Cada grupo é independente —
+ * expandir um não afeta os outros.
+ */
+(function () {
+  const toggles = document.querySelectorAll(".rule-group-toggle");
+
+  toggles.forEach((toggle) => {
+    const group = toggle.closest(".rule-group");
+    const summary = group.querySelector(".rule-group-summary");
+    const list = group.querySelector(".rule-group-list");
+    if (!list) return;
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      list.hidden = expanded;
+      if (summary) summary.hidden = !expanded;
+      group.classList.toggle("is-expanded", !expanded);
+    });
+  });
+})();

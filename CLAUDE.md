@@ -94,38 +94,122 @@ do `.prose` estreito). Enquanto o SVG mostra a *sequência* das etapas, essa
 seção documenta os *critérios* que o sistema aplica em cada uma — o que
 precisa existir antes, o que é obrigatório, como uma decisão é tomada.
 
-É um fluxo de cards conectados por setas (`.rules-scroll > .rules-flow`),
-mesma ideia do diagrama SVG acima — largura fixa por card (252px), sem
-encolher, `.rules-scroll` rola horizontalmente em telas estreitas. Optou-se
-por HTML/CSS em vez de SVG porque o texto de cada regra é parágrafo corrido
-(precisa quebrar linha), diferente dos nós do fluxograma. O círculo numerado
-em cada card (`.rule-number`) ecoa visualmente os círculos numerados do
-próprio wizard do `fmr-frontend` (Etapa 1‑2‑3‑4 vistos nos prints usados
-neste projeto).
+Desde 12/08/2026 não é mais um fluxo sequencial de 5 passos — é uma
+referência categorizada com **12 grupos** (`.rule-group`, letras A a K, com
+C.1 como subgrupo de C), cada um cobrindo uma parte do sistema (criação do
+plano, equipe, recomendações, validação/status, controle de edição,
+documentos, solicitar ajustes, ajuste por recomendação, aprovação da
+Chefia, histórico, controle de acesso). Os grupos ficam num grid responsivo
+(`.rules-groups`, `repeat(auto-fit, minmax(340px, 1fr))`) — não há mais
+setas entre eles, porque não é mais uma sequência única, é uma
+categorização. Cada grupo é um `.rule-group` com título (letra + nome +
+etapa/contexto entre parênteses) e uma lista compacta de regras.
 
-Hoje tem 5 regras, cobrindo do pré-requisito para gerar o plano (atividade
-com constatações e recomendações) até a decisão da Chefia que dispara a
-etapa de assinaturas. Os chips de status (`EM_EDICAO`,
-`AGUARDANDO_APROVACAO`, `APROVADO`) são citados dentro do texto das regras
-com `<code>`, para manter a regra ancorada no mesmo vocabulário do diagrama
-— se um chip mudar no diagrama, procure o mesmo texto aqui.
+Cada regra tem um código curto (`<code class="rule-id">A1</code>,
+`B2`...) antes do título em negrito, pra ficar referenciável em conversa
+("a regra D7 já cobre isso"). Esses códigos são estáveis — não renumere ao
+editar; se uma regra for removida, deixe o buraco na numeração em vez de
+renumerar as seguintes, porque a referência técnica abaixo (e qualquer
+conversa/ata que já citou o código) depende do código não mudar.
 
-Ao adicionar uma regra nova, siga o modelo (um `.rule-card` seguido de um
-`.rule-arrow`, exceto depois do último card):
+**Linguagem de negócio, não de código.** As regras são escritas pra quem
+não lê código — sem nome de arquivo, hook, variável, endpoint ou termo
+técnico do React. Onde faz sentido, os chips de status reais do backend
+(`EM_EDICAO`, `AGUARDANDO_APROVACAO`, `APROVADO`) continuam citados com
+`<code>`, pela mesma razão do resto do documento: ancorar no vocabulário
+real do sistema. Isso foi decisão explícita ao reescrever esta seção em
+12/08/2026 — a fonte original (abaixo) é bem mais técnica, com referência
+de arquivo:linha do `fmr-frontend`; a rastreabilidade fica só aqui no
+CLAUDE.md, não na página.
+
+**Cada grupo começa recolhido**, mostrando só o cabeçalho (letra + nome +
+contexto) e um resumo de uma frase; clicar expande e troca o resumo pela
+lista completa (`script.js`, IIFE do `.rule-group-toggle`). É por grupo, não
+um "expandir tudo" global — abrir um não afeta os outros. O botão cobre a
+faixa inteira do cabeçalho (maior área de clique, não só a setinha), e o
+estado vai em `aria-expanded` no botão + atributo `hidden` no resumo/lista.
+
+O `<ul class="rule-group-list">` já nasce com `hidden` no HTML — sem
+JavaScript (script bloqueado, erro de carregamento), a lista fica escondida
+e só o resumo aparece, com um botão que não faz nada. É um trade-off
+consciente: prioriza a página não abrir com 67 regras expandidas de uma vez,
+ao custo de depender de JS pra ver o detalhe.
+
+Ao adicionar um grupo novo, siga o modelo:
 
 ```html
-<div class="rule-card">
-  <span class="rule-number">N</span>
-  <b>Título curto da regra.</b>
-  <p>Explicação objetiva do critério e da consequência de cada caminho.</p>
-</div>
-
-<div class="rule-arrow" aria-hidden="true">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 12h14M13 6l7 6-7 6" />
-  </svg>
+<div class="rule-group">
+  <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-X">
+    <span class="rule-group-heading">
+      <span class="rule-group-letter">X</span>
+      <span class="rule-group-name">Nome do Grupo</span>
+      <span class="rule-group-sub">contexto opcional (ex.: Etapa 4)</span>
+    </span>
+    <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  </button>
+  <p class="rule-group-summary">Resumo de uma frase sobre o que esse grupo cobre.</p>
+  <ul class="rule-group-list" id="rules-X" hidden>
+    <li>
+      <b><code class="rule-id">X1</code> Título curto da regra.</b>
+      Explicação objetiva do critério e da consequência de cada caminho.
+    </li>
+  </ul>
 </div>
 ```
+
+O `id` do `<ul>` e o `aria-controls` do botão precisam bater (`rules-X`) —
+é só semântica de acessibilidade, o script encontra a lista por
+`.closest(".rule-group")` + `querySelector`, não pelo id.
+
+### Referências técnicas (fmr-frontend)
+
+Rastreabilidade das regras acima até o código-fonte do `fmr-frontend`, na
+forma como foram levantadas em 12/08/2026 (arquivo:linha — sujeito a
+desatualizar se o código mudar sem que este documento seja revisado; ver
+"Fonte da verdade" no início deste arquivo). Regras sem entrada aqui não
+vieram com uma referência específica no levantamento original.
+
+- **A** — A1 `gerar-preliminar.tsx:116-134`; A2 `gerar-preliminar.tsx:112-115`
+- **B** — B1 `equipeValidacao.ts:25-40`; B2 `equipeValidacao.ts:31`; B3
+  `equipeValidacao.ts:48-59`; B4 `useEquipeLocal.ts:20-23`,
+  `planoAcaoLocalStore.ts:9-14`; B5 `montarDetalhePlano.ts:55-60`
+- **C** — C1 `recomendacaoValidacao.ts:17-29`; C3
+  `ordenacaoRecomendacoes.ts:14-33`; C4 `ordenacaoRecomendacoes.ts:18-28`;
+  C7 `useLimparRecomendacoes.tsx:17-19`, `planoAcaoLocalStore.ts:123-138`
+- **C.1** — C8 `edicaoEmLote.ts:14-20`; C9 `edicaoEmLote.ts:30-38`; C10
+  `useSelecaoMultipla.ts:41-52`
+- **D** — D1 `validarPlano.ts:28-62`; D2 `validarPlano.ts:40-51`; D3
+  `ConfirmationView.tsx:247-259`; D4 `ConfirmationView.tsx:261-303`; D5
+  `ConfirmationView.tsx:266-277`; D6 `usePlanoLifecycle.ts:54-66`; D7
+  `ConfirmationView.tsx:186-204`, `gerar-preliminar.tsx:72-74`; D9
+  `useRascunhoAutosave.ts:129-135`; D10 `useRascunhoAutosave.ts:14`,
+  `planoAcaoWizard.service.ts:173-191`; D11 `useRascunhoAutosave.ts:85-127`
+- **E** — E1 `usePlanoSomenteLeitura.ts:47-72`; E2
+  `usePlanoSomenteLeitura.ts:55-56`; E3 `ConfirmationView.tsx:71-79`
+- **F** — F1 `gerar-preliminar.tsx:72-74`; F3
+  `gerarDocumentosPlano.service.ts:45-56`; F4
+  `gerarDocumentosPlano.service.ts:16-27`; F5 `useAcoesAprovacao.ts:101-121`
+- **H** — H1 `ajustePlanoAcao.type.ts:14-29`; H3
+  `planosAprovacao.service.ts:100-118`; H4 `ajustePlanoAcao.type.ts:22-27`;
+  H5 `ajustePlanoAcao.service.ts:22-28`; H6
+  `useAjusteRecomendacao.ts:62-82`; H7
+  `ajusteRecomendacao.validacao.ts:44-53`; H8
+  `ajusteRecomendacao.validacao.ts:18-30,70-76`; H10
+  `useAjustesRecomendacaoPendentes.ts:11-25`
+- **I** — I1 `planoAprovacao.type.ts:25`; I2 `useFilaAprovacao.ts:42-58`;
+  I3, I4, I5, I6 `planoDetalhe.derive.ts` (I4 `:183-185`, I5 `:72-86`, I6
+  `:78-84`); I7 `useDetalhePlanoAprovacao.ts:16-34`; I8
+  `useDevolverAjustes.ts:82-89`; I9 `resumoDevolucao.derive.ts:15-26`
+- **J** — J1 `historicoTramitacao.type.ts:12-17`; J3
+  `planosAprovacao.service.ts:25-27`
+- **K** — K1 `permissions.ts:22-49`; K2 `role-permissions.ts:16-30,56-92`;
+  K3 `role-permissions.ts:41-54`
+
+Sem referência no levantamento original: C2, C5, C6, C11, D8, F2, G1, G2,
+G3, H2, H9, I10, J2, K4 — regras de comportamento/decisão de produto sem um
+ponto único de código, ou levantadas por leitura geral do fluxo.
 
 ## Seção "Sugestões"
 
@@ -237,3 +321,11 @@ reais.
 - **12/08/2026** — identificador `variant-tag` (1A/1B/1C/1D) adicionado nos
   quatro cartões de layout de "Acompanhamento de Assinaturas", pra deixar
   claro que são variações da mesma proposta, não sugestões distintas.
+- **12/08/2026** — "Regras de Negócio" reescrita do zero a partir de um
+  levantamento técnico completo do `fmr-frontend` (12 grupos, A a K, quase
+  70 regras). Layout mudou de fluxo de 5 cards com setas para grid de
+  categorias; texto traduzido pra linguagem de negócio (sem arquivo/linha/
+  hook/endpoint na página); rastreabilidade técnica movida pro CLAUDE.md.
+- **12/08/2026** — grupos de "Regras de Negócio" passaram a nascer
+  recolhidos (resumo de uma frase + botão pra expandir), em vez de mostrar
+  as 67 regras todas abertas de uma vez.

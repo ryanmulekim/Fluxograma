@@ -175,99 +175,598 @@
     <section class="rules" id="regras-de-negocio">
       <h2>Regras de Negócio</h2>
       <p class="section-intro">
-        O que governa cada transição do fluxo acima — os critérios que o
-        sistema aplica em cada etapa, não apenas a sequência de telas.
+        Os critérios que o sistema aplica por trás de cada etapa do fluxo —
+        do início da criação do plano ao controle de quem pode fazer o quê.
+        Organizado em 12 grupos, cada regra com um código curto
+        (<code class="rule-id">A1</code>, <code class="rule-id">B2</code>...)
+        pra facilitar referência em conversa.
       </p>
-      <div class="rules-scroll">
-        <div class="rules-flow">
-          <div class="rule-card">
-            <span class="rule-number">1</span>
-            <b>Pré-requisito: atividade de auditoria com constatações e recomendações.</b>
-            <p>
-              Um Plano de Ação só pode ser gerado a partir de uma atividade
-              de auditoria que já possua constatações e recomendações
-              registradas. Sem esses dois elementos não há o que monitorar,
-              e o assistente (Etapa 1) não é iniciado.
-            </p>
-          </div>
 
-          <div class="rule-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12h14M13 6l7 6-7 6" />
+      <div class="rules-groups">
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-A">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">A</span>
+              <span class="rule-group-name">Criação do Plano de Ação</span>
+              <span class="rule-group-sub">Etapa 1 → Etapa 2</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
             </svg>
-          </div>
+          </button>
+          <p class="rule-group-summary">
+            Como e quando o plano passa a existir de verdade no sistema, e
+            por que reabrir a atividade não cria um segundo plano.
+          </p>
+          <ul class="rule-group-list" id="rules-A" hidden>
+            <li>
+              <b><code class="rule-id">A1</code> Abertura é idempotente.</b>
+              Sair da Etapa 1 para a etapa seguinte busca ou cria o plano da
+              atividade automaticamente: se já existe um (rascunho ou
+              aprovado), reaproveita; senão, cria um novo em
+              <code>EM_EDICAO</code>. Nunca duplica — o sistema garante um
+              único plano por atividade.
+            </li>
+            <li>
+              <b><code class="rule-id">A2</code> Navegar entre etapas é livre.</b>
+              Não há bloqueio de avanço para atividades que já têm plano
+              aprovado — foi uma decisão de produto. O aviso de "já existe
+              plano" aparece só como informativo na Etapa 1, sem impedir a
+              navegação.
+            </li>
+          </ul>
+        </div>
 
-          <div class="rule-card">
-            <span class="rule-number">2</span>
-            <b>Equipe de monitoramento e recomendações são de preenchimento obrigatório do auditor.</b>
-            <p>
-              Nas Etapas 2 e 3, o auditor preenche ou complementa,
-              respectivamente, os dados da equipe responsável pelo
-              monitoramento e os dados de cada recomendação da atividade.
-              Essas duas seções concentram a maior parte da informação que o
-              plano carrega adiante.
-            </p>
-          </div>
-
-          <div class="rule-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12h14M13 6l7 6-7 6" />
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-B">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">B</span>
+              <span class="rule-group-name">Equipe de Monitoramento</span>
+              <span class="rule-group-sub">Etapa 2</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
             </svg>
-          </div>
+          </button>
+          <p class="rule-group-summary">
+            Quais pendências de equipe o sistema cobra do auditor, e o que
+            vale quando ele opta por não mexer nela.
+          </p>
+          <ul class="rule-group-list" id="rules-B" hidden>
+            <li>
+              <b><code class="rule-id">B1</code> Três pendências possíveis, mostradas uma de cada vez.</b>
+              O sistema identifica três problemas na equipe: nenhuma opção
+              escolhida (manter ou editar), nenhum membro informado, ou
+              membros informados sem coordenador definido.
+            </li>
+            <li>
+              <b><code class="rule-id">B2</code> Falta de coordenador só é cobrada se já existe equipe.</b>
+              Se a equipe está vazia, o sistema avisa só isso — não soma um
+              segundo aviso sobre coordenador ausente, pra não misturar as
+              duas mensagens.
+            </li>
+            <li>
+              <b><code class="rule-id">B3</code> Um aviso só, pela causa mais básica primeiro.</b>
+              Prioridade: falta escolher o modo → equipe vazia → falta
+              coordenador. É o mesmo texto que aparece tanto no aviso rápido
+              quanto no alerta da Etapa 4.
+            </li>
+            <li>
+              <b><code class="rule-id">B4</code> Nenhuma opção vem marcada por padrão.</b>
+              "Manter equipe atual" só é assumido no momento de exibir a
+              tela — nunca é gravado como escolha do usuário se ele não
+              decidiu de fato. Evita que o rascunho salvo registre uma
+              decisão que ninguém tomou.
+            </li>
+            <li>
+              <b><code class="rule-id">B5</code> Ao manter a equipe, vale a equipe da auditoria.</b>
+              Se o auditor não edita a Etapa 2, o plano usa a equipe que já
+              veio registrada na atividade de auditoria — nunca uma lista
+              vazia.
+            </li>
+          </ul>
+        </div>
 
-          <div class="rule-card">
-            <span class="rule-number">3</span>
-            <b>Edição de recomendações: individual ou em massa.</b>
-            <p>
-              Na Etapa 3, o auditor edita as recomendações uma a uma ou em
-              lote, selecionando várias de uma vez (modo de múltipla
-              seleção). Em ambos os casos, o único dado exigido nesse ponto é
-              a categoria da recomendação — é ela que determina
-              automaticamente se aquela recomendação é ou não passível de
-              monitoramento.
-            </p>
-          </div>
-
-          <div class="rule-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12h14M13 6l7 6-7 6" />
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-C">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">C</span>
+              <span class="rule-group-name">Recomendações — Classificação</span>
+              <span class="rule-group-sub">Etapa 3</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
             </svg>
-          </div>
+          </button>
+          <p class="rule-group-summary">
+            O que é obrigatório preencher em cada recomendação, e como a
+            lista se organiza pra destacar o que falta ou foi pedido pela
+            Chefia.
+          </p>
+          <ul class="rule-group-list" id="rules-C" hidden>
+            <li>
+              <b><code class="rule-id">C1</code> Duas informações obrigatórias por recomendação.</b>
+              Se ela deve ser monitorada e sua classificação (categoria).
+            </li>
+            <li>
+              <b><code class="rule-id">C2</code> "Monitorar" não é mais escolhido manualmente — vem da categoria.</b>
+              Ao selecionar a categoria da recomendação, o sistema já
+              determina se ela é monitorável, a partir do cadastro de
+              categorias. Não existe mais edição manual nem botão pra limpar
+              esse campo isoladamente.
+            </li>
+            <li>
+              <b><code class="rule-id">C3</code> A ordem da lista é fixada na entrada da tela.</b>
+              As recomendações com pendência da Chefia entram no topo
+              primeiro; essa ordem fica travada até o auditor sair e voltar
+              à Etapa 3 — preencher uma recomendação não faz ela "pular de
+              lugar" no meio da edição.
+            </li>
+            <li>
+              <b><code class="rule-id">C4</code> Prioridade de destaque no topo: pendência da Chefia > pendência de preenchimento > preenchida.</b>
+              Mesmo uma recomendação já preenchida sobe para o topo se a
+              Chefia pediu ajuste nela — o pedido da Chefia vem primeiro.
+            </li>
+            <li>
+              <b><code class="rule-id">C5</code> Avançar da Etapa 3 não valida nada.</b>
+              É possível ir para a Etapa 4 mesmo com campos vazios; a
+              validação de fato só acontece lá.
+            </li>
+            <li>
+              <b><code class="rule-id">C6</code> O indicador verde é sempre visível; o vermelho só aparece depois de uma tentativa de avanço sem sucesso.</b>
+              Não ver o verde ("preenchida") não é erro — o vermelho
+              ("pendente") é um aviso que só liga quando o sistema barra o
+              avanço.
+            </li>
+            <li>
+              <b><code class="rule-id">C7</code> "Limpar" apaga categoria, monitoramento e prazo de TODAS as recomendações da atividade.</b>
+              Não só das filtradas na busca, nem só das marcadas no modo de
+              seleção múltipla — é uma ação deliberadamente ampla, porque
+              afeta a atividade inteira.
+            </li>
+          </ul>
+        </div>
 
-          <div class="rule-card">
-            <span class="rule-number">4</span>
-            <b>Validação da Etapa 4 antes de disponibilizar para a Chefia.</b>
-            <p>
-              Na Etapa 4 (Confirmação), o auditor revisa o que preencheu e
-              aciona "Validar". O sistema confere se os dados obrigatórios
-              das Etapas 2 e 3 estão completos e corretos: havendo pendência,
-              exibe um alerta apontando os dados faltantes e o plano
-              permanece em edição; estando tudo certo, libera ao auditor a
-              escolha entre permanecer em edição (<code>EM_EDICAO</code>) ou
-              disponibilizar o plano para a Chefia
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-C1">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">C.1</span>
+              <span class="rule-group-name">Seleção Múltipla</span>
+              <span class="rule-group-sub">edição em lote, Etapa 3</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            Como a edição em lote aplica um valor a várias recomendações de
+            uma vez, sem gravar nada permanentemente.
+          </p>
+          <ul class="rule-group-list" id="rules-C1" hidden>
+            <li>
+              <b><code class="rule-id">C8</code> No modo múltiplo, o valor é aplicado a todas as recomendações selecionadas de uma vez;</b>
+              no modo individual, só à recomendação aberta.
+            </li>
+            <li>
+              <b><code class="rule-id">C9</code> Se as recomendações selecionadas têm valores diferentes, o campo aparece vazio.</b>
+              Em vez de mostrar o valor de uma delas como se valesse para
+              todas — evita sugerir uma uniformidade que não existe.
+            </li>
+            <li>
+              <b><code class="rule-id">C10</code> "Selecionar todos" marca a lista filtrada inteira, não só a página visível.</b>
+              Marcar, mudar de página e marcar de novo dá o mesmo resultado
+              que marcar tudo de uma vez.
+            </li>
+            <li>
+              <b><code class="rule-id">C11</code> A seleção múltipla não é salva.</b>
+              É um estado temporário da tela, que sobrevive a navegar entre
+              páginas ou buscar dentro da mesma sessão de edição, mas se
+              perde ao sair.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-D">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">D</span>
+              <span class="rule-group-name">Validação e Transições de Status</span>
+              <span class="rule-group-sub">Etapa 4</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            O que precisa estar correto pra um plano avançar, e o que
+            acontece por trás de cada mudança de status.
+          </p>
+          <ul class="rule-group-list" id="rules-D" hidden>
+            <li>
+              <b><code class="rule-id">D1</code> Um plano só é válido quando equipe E recomendações estão, ambas, sem pendência.</b>
+            </li>
+            <li>
+              <b><code class="rule-id">D2</code> Pendência de equipe tem prioridade sobre pendência de recomendações no aviso.</b>
+              É a mais básica e sua correção fica em outra etapa — pedir pra
+              corrigir recomendações primeiro faria o auditor voltar duas
+              vezes.
+            </li>
+            <li>
+              <b><code class="rule-id">D3</code> A mesma validação controla tanto "Validar Informações" quanto "Aprovar".</b>
+              Havendo pendência, o sistema mostra os alertas nas tabelas, um
+              aviso de erro, e bloqueia o clique.
+            </li>
+            <li>
+              <b><code class="rule-id">D4</code> "Validar Informações" sem pendências abre a escolha entre permanecer em edição ou disponibilizar para a Chefia</b>
               (<code>→ AGUARDANDO_APROVACAO</code>).
-            </p>
-          </div>
+            </li>
+            <li>
+              <b><code class="rule-id">D5</code> A validação em si é instantânea e local; o registro no sistema é só formalidade.</b>
+              Uma falha de conexão nesse registro não impede o auditor de
+              continuar, porque o plano já foi considerado correto antes
+              disso.
+            </li>
+            <li>
+              <b><code class="rule-id">D6</code> Antes de qualquer mudança de status, o rascunho é salvo imediatamente.</b>
+              Sem esperar o salvamento automático de rotina — garante que o
+              servidor tenha a versão mais recente antes de disponibilizar
+              ou aprovar.
+            </li>
+            <li>
+              <b><code class="rule-id">D7</code> "Aprovar" só se efetiva depois que os documentos são gerados com sucesso.</b>
+              Se a geração falhar, o plano permanece
+              <code>AGUARDANDO_APROVACAO</code> — nunca é promovido a
+              aprovado sem os documentos prontos.
+            </li>
+            <li>
+              <b><code class="rule-id">D8</code> A data de aprovação, não o status em si, é o sinal oficial de "plano finalizado".</b>
+              Para os avisos e telas que dependem disso.
+            </li>
+            <li>
+              <b><code class="rule-id">D9</code> O salvamento automático para de funcionar assim que o plano sai de "Em Edição".</b>
+              Depois de disponibilizado ou aprovado, nada mais é salvo
+              automaticamente — evita sobrescrever um plano que já não está
+              mais em edição.
+            </li>
+            <li>
+              <b><code class="rule-id">D10</code> O salvamento automático roda sozinho após um breve período de inatividade,</b>
+              tanto para a equipe quanto para cada recomendação já
+              classificada.
+            </li>
+            <li>
+              <b><code class="rule-id">D11</code> Ao abrir um plano, os dados vêm do servidor, não do que ficou salvo no navegador.</b>
+              Como um plano pode ser editado por pessoas diferentes em
+              máquinas diferentes, o que está salvo no servidor sempre
+              prevalece — sem isso, a tela poderia aparecer em branco ou
+              desatualizada.
+            </li>
+          </ul>
+        </div>
 
-          <div class="rule-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12h14M13 6l7 6-7 6" />
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-E">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">E</span>
+              <span class="rule-group-name">Controle de Edição</span>
+              <span class="rule-group-sub">quem pode mexer, e quando</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
             </svg>
-          </div>
+          </button>
+          <p class="rule-group-summary">
+            Quem pode editar o plano em cada status, e quando essa permissão
+            volta ou se fecha de vez.
+          </p>
+          <ul class="rule-group-list" id="rules-E" hidden>
+            <li>
+              <b><code class="rule-id">E1</code> Disponibilizado para a Chefia trava a edição só para quem elabora.</b>
+              A Chefia continua podendo agir (aprovar ou solicitar ajustes).
+              Volta a ficar editável para o auditor quando a Chefia devolve o
+              plano.
+            </li>
+            <li>
+              <b><code class="rule-id">E2</code> Aprovado trava a edição para todo mundo.</b>
+              Ninguém mais edita ou exclui, nem quem elaborou nem a Chefia.
+              Só resta visualizar.
+            </li>
+            <li>
+              <b><code class="rule-id">E3</code> Cada perfil vê só as ações que lhe cabem na Etapa 4.</b>
+              O auditor vê Voltar/Excluir/Validar Informações; a Chefia vê
+              Voltar/Excluir/Solicitar Ajustes/Aprovar. Nenhum perfil vê as
+              ações do outro lado.
+            </li>
+          </ul>
+        </div>
 
-          <div class="rule-card">
-            <span class="rule-number">5</span>
-            <b>Revisão e decisão da Chefia.</b>
-            <p>
-              Depois de disponibilizado, o plano entra na fila da Chefia, que
-              revisa os dados preenchidos pelo auditor. Havendo
-              inconsistência, a Chefia solicita ajustes e devolve o plano ao
-              auditor (<code>→ EM_EDICAO</code>); estando tudo em
-              conformidade, a Chefia aprova o plano
-              (<code>→ APROVADO</code>), o que dispara a geração dos
-              documentos e dá início à etapa de assinaturas.
-            </p>
-          </div>
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-F">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">F</span>
+              <span class="rule-group-name">Geração de Documentos</span>
+              <span class="rule-group-sub">.docx + .xlsx</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            Quando os arquivos do plano são gerados, o que entra neles, e
+            por que o download nunca é automático.
+          </p>
+          <ul class="rule-group-list" id="rules-F" hidden>
+            <li>
+              <b><code class="rule-id">F1</code> "Aprovar" só se conclui quando os DOIS documentos são gerados.</b>
+              O Plano de Ação e a Planilha de Monitoramento. Um documento
+              gerado não basta.
+            </li>
+            <li>
+              <b><code class="rule-id">F2</code> Os dois downloads exigem clique explícito do usuário.</b>
+              Nunca disparados automaticamente — o navegador bloqueia
+              silenciosamente o segundo de dois downloads simultâneos sem
+              gesto do usuário para cada um.
+            </li>
+            <li>
+              <b><code class="rule-id">F3</code> Só entram nos documentos as recomendações marcadas como monitoráveis.</b>
+            </li>
+            <li>
+              <b><code class="rule-id">F4</code> Aprovar pela fila da Chefia usa uma fonte de dados diferente de aprovar pelo Wizard, mas gera os mesmos documentos.</b>
+              O Wizard usa os dados que o próprio auditor está editando; a
+              fila reconstrói tudo a partir do que foi submetido, porque a
+              Chefia pode estar em outra máquina, sem visibilidade do
+              rascunho de ninguém.
+            </li>
+            <li>
+              <b><code class="rule-id">F5</code> Na fila da Chefia, os documentos são gerados ANTES da aprovação — e uma falha na geração bloqueia a aprovação.</b>
+              Evita que a Chefia veja um plano aprovado sem conseguir baixar
+              os arquivos correspondentes.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-G">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">G</span>
+              <span class="rule-group-name">"Solicitar Ajustes"</span>
+              <span class="rule-group-sub">ajuste do plano inteiro</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            Como funciona o pedido de ajuste do plano inteiro — diferente do
+            ajuste por recomendação (ver H).
+          </p>
+          <ul class="rule-group-list" id="rules-G" hidden>
+            <li>
+              <b><code class="rule-id">G1</code> Nasce já como pedido enviado, não como rascunho.</b>
+              Diferente do ajuste por recomendação (ver H), aqui é pedido e
+              envio no mesmo ato. Pode ser disparado tanto pelo auditor na
+              Etapa 4 quanto pela Chefia na fila de aprovação.
+            </li>
+            <li>
+              <b><code class="rule-id">G2</code> O texto da solicitação é obrigatório.</b>
+              Sem ele, o botão de envio fica desabilitado.
+            </li>
+            <li>
+              <b><code class="rule-id">G3</code> Fechar a confirmação de envio não navega para outro lugar.</b>
+              Diferente de "Aprovar", quem solicitou o ajuste permanece na
+              mesma tela.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-H">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">H</span>
+              <span class="rule-group-name">"Ajustes da Recomendação"</span>
+              <span class="rule-group-sub">ciclo Rascunho → Solicitado → Atendido</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            O ciclo de vida de um ajuste pontual numa recomendação, de
+            rascunho da Chefia até corrigido pelo auditor.
+          </p>
+          <ul class="rule-group-list" id="rules-H" hidden>
+            <li>
+              <b><code class="rule-id">H1</code> Cada recomendação tem no máximo um ajuste ativo por vez.</b>
+              Reabrir o registro numa recomendação que já tem ajuste edita o
+              existente, nunca acumula um segundo.
+            </li>
+            <li>
+              <b><code class="rule-id">H2</code> O ajuste nasce como rascunho, visível só para a Chefia.</b>
+              O auditor não sabe que existe até a Chefia efetivamente
+              enviar.
+            </li>
+            <li>
+              <b><code class="rule-id">H3</code> O ajuste vira "Solicitado" no mesmo momento em que o plano é devolvido ao auditor.</b>
+              Os dois acontecem juntos, não em dois passos separados —
+              evitando uma janela em que o plano voltasse devolvido com os
+              pedidos ainda invisíveis.
+            </li>
+            <li>
+              <b><code class="rule-id">H4</code> O ajuste vira "Atendido" no mesmo momento em que o plano corrigido é disponibilizado de novo</b>
+              pelo auditor.
+            </li>
+            <li>
+              <b><code class="rule-id">H5</code> Quem decide o que cada pessoa vê é o sistema no servidor, não a tela.</b>
+              A lista que chega ao navegador já vem filtrada pela permissão
+              de quem está olhando; qualquer filtro na tela é só
+              conveniência visual, não a garantia de sigilo.
+            </li>
+            <li>
+              <b><code class="rule-id">H6</code> Reabrir uma recomendação já "Atendida" começa um ciclo novo.</b>
+              O registro volta a rascunho, e a tela não pré-preenche o texto
+              anterior, para não reaproveitar por engano um texto que já foi
+              corrigido.
+            </li>
+            <li>
+              <b><code class="rule-id">H7</code> Descrição do ajuste e justificativa são ambas obrigatórias para salvar,</b>
+              com limite de caracteres em cada uma.
+            </li>
+            <li>
+              <b><code class="rule-id">H8</code> Anexo tem limite de tamanho e tipos de arquivo aceitos, verificados também pelo sistema.</b>
+              Não só pela seleção do navegador, que pode ser contornada
+              arrastando o arquivo direto.
+            </li>
+            <li>
+              <b><code class="rule-id">H9</code> Só as informações do anexo são guardadas, não o arquivo em si.</b>
+              Hoje não é possível baixar o anexo depois, só removê-lo; o
+              armazenamento do arquivo ainda não existe.
+            </li>
+            <li>
+              <b><code class="rule-id">H10</code> O auditor só enxerga os ajustes já solicitados.</b>
+              É o único status que aparece do lado dele; as telas da própria
+              Chefia mostram todos os status, incluindo os próprios
+              rascunhos.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-I">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">I</span>
+              <span class="rule-group-name">Aprovação da Chefia</span>
+              <span class="rule-group-sub">fila e detalhe</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            As regras da fila de aprovação e do detalhe do plano — o que
+            trava aprovar, e o que a Chefia vê.
+          </p>
+          <ul class="rule-group-list" id="rules-I" hidden>
+            <li>
+              <b><code class="rule-id">I1</code> A fila de aprovação mostra só os planos disponibilizados e aguardando decisão.</b>
+            </li>
+            <li>
+              <b><code class="rule-id">I2</code> "Aprovar" fica desabilitado quando o plano tem ajuste de recomendação em aberto.</b>
+              Conta rascunho e solicitado, mas não os já atendidos. Um
+              ajuste do plano inteiro, sem ligação a uma recomendação
+              específica, não conta para esse bloqueio.
+            </li>
+            <li>
+              <b><code class="rule-id">I3</code> No detalhe do plano, "Aprovar" desaparece (não só desabilita) quando há ajuste pendente.</b>
+              A Chefia já sinalizou que algo precisa ser corrigido; aprovar
+              por cima disso homologaria uma pendência aberta.
+            </li>
+            <li>
+              <b><code class="rule-id">I4</code> As ações de aprovar/devolver só existem enquanto o plano está aguardando decisão.</b>
+              Um plano já aprovado ou devolvido continua visível pra quem já
+              estava na tela, mas sem os botões de ação.
+            </li>
+            <li>
+              <b><code class="rule-id">I5</code> O detalhe do plano mostra a fotografia do momento em que foi disponibilizado, não a lista atual.</b>
+              Uma recomendação criada na auditoria depois desse momento não
+              aparece como se fizesse parte do plano.
+            </li>
+            <li>
+              <b><code class="rule-id">I6</code> Recomendações com mais de um destinatário aparecem repetidas, uma vez em cada grupo.</b>
+              É intencional — cada área precisa vê-la na sua própria lista.
+              A soma dos contadores por grupo pode passar do total de
+              recomendações do plano; não é erro.
+            </li>
+            <li>
+              <b><code class="rule-id">I7</code> A tela distingue destinatário de responsável,</b>
+              mesmo quando a informação de origem guarda os dois sob o mesmo
+              nome — a tradução acontece num único ponto, pra tela inteira
+              falar a linguagem certa.
+            </li>
+            <li>
+              <b><code class="rule-id">I8</code> "Devolver para Ajustes" não pede mais um texto geral.</b>
+              Reúne o que a Chefia já registrou recomendação a recomendação e
+              só pede confirmação. Fica desabilitado se nenhuma recomendação
+              tiver ajuste registrado.
+            </li>
+            <li>
+              <b><code class="rule-id">I9</code> O resumo de devolução mostra uma linha por recomendação com pelo menos um ajuste,</b>
+              ordenado pelo número da recomendação, excluindo as já
+              atendidas.
+            </li>
+            <li>
+              <b><code class="rule-id">I10</code> A data/hora registrada na solicitação de devolução é a da abertura da tela,</b>
+              não a de nenhum ajuste individual.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-J">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">J</span>
+              <span class="rule-group-name">Histórico de Tramitações</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            Como cada marco do plano fica registrado, sem esconder ciclos de
+            devolução e reenvio.
+          </p>
+          <ul class="rule-group-list" id="rules-J" hidden>
+            <li>
+              <b><code class="rule-id">J1</code> Cinco marcos são registrados, cada um no momento exato em que acontece de verdade:</b>
+              criação, validação, disponibilização, ajuste solicitado,
+              aprovação.
+            </li>
+            <li>
+              <b><code class="rule-id">J2</code> Não há junção de eventos repetidos — cada marco empilha um novo registro.</b>
+              Um ciclo de devolução e correção produz naturalmente a
+              sequência completa (criação → validação → disponibilização →
+              devolução → validação → disponibilização → aprovação), sem
+              tentar "resumir" a repetição aparente.
+            </li>
+            <li>
+              <b><code class="rule-id">J3</code> Para aprovar ou devolver, é o próprio sistema central quem registra o marco,</b>
+              no mesmo momento da ação — a tela não duplica esse registro.
+            </li>
+          </ul>
+        </div>
+
+        <div class="rule-group">
+          <button type="button" class="rule-group-toggle" aria-expanded="false" aria-controls="rules-K">
+            <span class="rule-group-heading">
+              <span class="rule-group-letter">K</span>
+              <span class="rule-group-name">Controle de Acesso</span>
+              <span class="rule-group-sub">quem pode fazer o quê</span>
+            </span>
+            <svg class="rule-group-chevron" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          <p class="rule-group-summary">
+            Quem pode fazer o quê no sistema, por permissão — não por cargo.
+          </p>
+          <ul class="rule-group-list" id="rules-K" hidden>
+            <li>
+              <b><code class="rule-id">K1</code> O sistema verifica permissões específicas, não um "papel" genérico do usuário.</b>
+              Aprovar/devolver, elaborar/validar, acessar a fila da Chefia e
+              visualizar o módulo são quatro permissões independentes.
+            </li>
+            <li>
+              <b><code class="rule-id">K2</code> Hoje, quem elabora são auditores, coordenadores e supervisores;</b>
+              quem aprova e acessa a fila é a Chefia e o Admin.
+            </li>
+            <li>
+              <b><code class="rule-id">K3</code> O Admin herda automaticamente tudo que a Chefia pode fazer.</b>
+              Uma permissão nova dada à Chefia já vale pro Admin, sem
+              precisar configurar de novo.
+            </li>
+            <li>
+              <b><code class="rule-id">K4</code> A Chefia homologa, mas não elabora planos.</b>
+              Nenhum perfil enxerga as duas pontas do fluxo ao mesmo tempo.
+            </li>
+          </ul>
         </div>
       </div>
     </section>

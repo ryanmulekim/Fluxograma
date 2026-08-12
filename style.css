@@ -377,70 +377,118 @@ figcaption b {
   line-height: 1.6;
 }
 
-/* Regras de Negócio: same horizontal-flow idea as the SVG diagram above —
-   fixed-width cards in a row, connected by arrows, scrolling instead of
-   shrinking on narrow screens. Kept as plain HTML/CSS (not SVG) because
-   the rule text is prose-length and needs to wrap, not fit a fixed box. */
-.rules-scroll {
-  overflow-x: auto;
-  padding-bottom: 6px;
+/* Regras de Negócio: 12 grupos de regras (não é mais sequencial — categorias
+   de A a K, não passos), em grid responsivo. Cada grupo é um cartão de
+   referência com uma lista compacta de regras, não um passo de fluxo. */
+.rules-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
-.rules-flow {
-  display: flex;
-  align-items: stretch;
-  width: max-content;
-}
-
-.rule-card {
-  width: 252px;
-  flex: none;
+.rule-group {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  padding: 16px 20px 18px;
 }
 
-.rule-number {
+/* Collapsed by default (see script.js): the toggle button shows letter +
+   name + a one-line summary; expanding swaps the summary for the full
+   .rule-group-list. Whole header row is one button for a bigger hit
+   target, not just the chevron. */
+.rule-group-toggle {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.rule-group-toggle:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.rule-group-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.rule-group-letter {
   flex: none;
-  width: 26px;
+  min-width: 26px;
   height: 26px;
-  border-radius: 50%;
+  padding: 0 6px;
+  border-radius: 999px;
   background: var(--accent-blue-soft);
   color: var(--accent-blue);
   font-family: var(--sans);
   font-size: 12.5px;
   font-weight: 700;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
 }
 
-.rule-card b {
-  color: var(--ink);
+.rule-group-sub {
+  font-family: var(--sans);
+  font-size: 12px;
   font-weight: 600;
-  font-size: 14.5px;
-  line-height: 1.4;
+  color: var(--ink-faint);
 }
 
-.rule-card p {
-  margin: 0;
-  color: var(--ink-muted);
+.rule-group-chevron {
+  flex: none;
+  color: var(--ink-faint);
+  transition: transform 0.15s ease;
+}
+
+.rule-group-toggle[aria-expanded="true"] .rule-group-chevron {
+  transform: rotate(180deg);
+}
+
+.rule-group-summary {
+  margin: 10px 0 0;
   font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.rule-group-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.rule-group-list[hidden] {
+  display: none;
+}
+
+.rule-group-list li {
+  font-size: 13.5px;
+  color: var(--ink-muted);
   line-height: 1.55;
 }
 
-.rule-arrow {
-  flex: none;
-  width: 40px;
-  align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-faint);
+.rule-group-list b {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .notes ul {
@@ -475,7 +523,7 @@ figcaption b {
   font-weight: 600;
 }
 .notes code,
-.rule-card code {
+.rule-group-list code {
   font-family: var(--mono);
   font-size: 0.92em;
   background: var(--surface-2);
@@ -483,6 +531,20 @@ figcaption b {
   border-radius: 4px;
   padding: 0.05em 0.4em;
   color: var(--ink);
+}
+
+/* Rule-id references (A1, B2...) are a citation, not a status chip — no
+   background/border, just colored mono text. Placed after the chip rule
+   above and matched on element+class (not scoped to .rule-group-list) so
+   it wins both inside rule cards and in the section-intro's example refs. */
+code.rule-id {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-right: 2px;
 }
 
 /* --- Sugestões / Regras de Negócio: full-width like the diagram, so the
