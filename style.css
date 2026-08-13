@@ -195,21 +195,67 @@ figure {
   padding: 28px 20px 20px;
 }
 
+/* Abas de visão do fluxograma (Fluxo 1/2/3): mesma linguagem visual dos
+   .filter-chip de Sugestões (pill, ativo = fundo azul-soft), pra reaproveitar
+   um padrão já estabelecido na página em vez de inventar um visual novo de
+   "aba de navegador". */
+.diagram-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.diagram-tab {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.diagram-tab:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.diagram-tab:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.diagram-tab[aria-selected="true"] {
+  background: var(--accent-blue-soft);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.diagram-panel[hidden] {
+  display: none;
+}
+
 .diagram-scroll {
-  overflow-x: auto;
+  display: flex;
+  justify-content: center;
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
   background-size: 22px 22px;
   background-position: -4px -4px;
   border-radius: 8px;
 }
 
-/* Fixed natural size, not scaled-to-fit: at this many nodes in a row,
-   shrinking to the viewport would make the labels unreadable. Narrower
-   screens scroll .diagram-scroll horizontally instead. */
+/* Coluna vertical, escalada pelo viewBox: cabe na largura de qualquer tela
+   sem scroll horizontal (era o problema do layout horizontal anterior, que
+   quebrava pra fora em telas menores que 2780px). max-width mantém o
+   diagrama num tamanho de leitura confortável em monitores largos. */
 svg.flow {
   display: block;
-  width: 2780px;
-  height: 320px;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
 }
 
 /* --- node styling, driven by CSS so both themes stay in sync --- */

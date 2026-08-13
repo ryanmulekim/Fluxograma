@@ -123,3 +123,24 @@
     });
   });
 })();
+
+/**
+ * Abas de visão do fluxograma (Fluxo 1/2/3). Cada aba controla um painel
+ * independente (SVG + legenda próprios); clicar troca aria-selected na aba
+ * e hidden no painel correspondente, igual ao padrão de tab nativo.
+ */
+(function () {
+  const tabs = document.querySelectorAll(".diagram-tab");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => {
+        const selected = t === tab;
+        t.setAttribute("aria-selected", String(selected));
+        t.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !selected;
+      });
+    });
+  });
+})();
