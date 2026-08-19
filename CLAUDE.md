@@ -345,7 +345,7 @@ depois do `<p>`:
 
 Isso abre a imagem em tamanho real numa nova aba — sem JS, sem lightbox.
 
-Hoje há oito cartões reais, em três tags:
+Hoje há nove cartões reais, em quatro tags:
 
 - **Assinaturas** (5 cartões) — quatro propostas de layout para a mesma
   tela dedicada de acompanhamento de assinaturas (1A cartões por
@@ -374,6 +374,18 @@ Hoje há oito cartões reais, em três tags:
   `fmr-frontend` (Administração), não um mockup desenhado — a sugestão é
   acrescentar essa mesma lógica a outros contextos de parametrização, não
   redesenhar a tela em si.
+- **Relatório Gerencial** (1 cartão, primeiro com essa tag) — tela onde a
+  Chefia marca atividades de auditoria e gera um relatório gerencial
+  consolidado de monitoramento em Excel, com os filtros aplicados
+  refletidos no arquivo. Reaproveita a mesma lógica da tela "Relatório
+  Consolidado" já existente em Consultar (seleção de atividades, filtros,
+  resumo com totais antes de gerar), só que com recorte gerencial da
+  Chefia em vez de por atividade de auditoria individual. Mockup
+  (`sugestao-relatorio-gerencial.png`) é screenshot real da tela
+  "Relatório Consolidado" (Consultar → Relatório Consolidado) do
+  `fmr-frontend`, mesma lógica do cartão de "Parametrização": ilustra o
+  padrão existente que a sugestão propõe adaptar, não um desenho da tela
+  nova em si.
 
 O cartão placeholder ("Nenhuma sugestão registrada ainda") foi removido
 quando o primeiro cartão real entrou — só existia para o estado vazio.
@@ -496,3 +508,16 @@ reais.
   tabela de partes signatárias) mudou de `status open` ("Em aberto") pra
   `status accepted` ("Aprovado") — fecha a decisão entre as quatro
   variações de layout, já que as outras três (1A/1B/1C) estão `rejected`.
+- **19/08/2026** — Cartão novo em "Sugestões": "Relatório Gerencial de
+  Monitoramento", primeira com a tag "Relatório Gerencial" (aparece
+  sozinha no filtro agora). Proposta: a Chefia marca atividades de
+  auditoria e gera um relatório gerencial consolidado em Excel, com os
+  filtros aplicados refletidos no arquivo — reaproveitando a mesma lógica
+  da tela "Relatório Consolidado" já existente em Consultar, mas com
+  recorte gerencial da Chefia em vez de por atividade. Mockup
+  (`sugestao-relatorio-gerencial.png`) é screenshot real dessa tela
+  existente, colado pelo usuário e localizado em
+  `C:\Users\ryan.pereira\Pictures\Screenshots\` pelo timestamp mais
+  recente — mesmo padrão do cartão de "Parametrização" (screenshot real
+  do sistema como ilustração do padrão a adaptar, não mockup desenhado).
+  Total subiu de oito para nove cartões reais, em quatro tags.
